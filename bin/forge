@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+const path = require('path'); // eslint-disable-line
+require(path.resolve(__dirname, '../src/index.js')); // eslint-disable-line

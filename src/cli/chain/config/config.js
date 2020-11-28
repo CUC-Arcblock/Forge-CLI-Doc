@@ -15,15 +15,15 @@ async function main({
   args: [action = 'get'],
   opts: { peer, defaults, chainName = process.env.FORGE_CURRENT_CHAIN },
 }) {
-  if (action === 'get') {
-    if (peer) {
+  if (action === 'get') {    //操作字段如果是get
+    if (peer) {     //如果链上存在节点，输出节点的配置
       const client = new GraphQLClient(`${webUrl()}/api`);
       // eslint-disable-next-line no-shadow
       const { config } = await client.getConfig({ parsed: true });
       printSuccess('config for peer:');
       print(hr);
       print(config);
-    } else {
+    } else {       
       const forgeConfigPath = getChainReleaseFilePath(chainName);
       print(hr);
       printInfo(`config file path: ${forgeConfigPath}`);
@@ -34,7 +34,7 @@ async function main({
     return;
   }
 
-  if (action === 'set') {
+  if (action === 'set') {   //操作字段如果是set
     const isStarted = await isForgeStarted(chainName);
     if (isStarted) {
       printWarning(

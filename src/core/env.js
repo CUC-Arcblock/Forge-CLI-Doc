@@ -32,7 +32,7 @@ const debug = require('./debug')('env');
 const CURRENT_WORKING_CHAIN = getChainDirectory(process.env.FORGE_CURRENT_CHAIN);
 process.env.CURRENT_WORKING_CHAIN = CURRENT_WORKING_CHAIN;
 
-const config = { cli: {} }; // global shared forge-cli run time config
+const config = { cli: {} }; // global shared forge-cli run time config 全局共享的forge-cli运行时配置
 
 /**
  * Setup running env for various commands, the check order for each requirement is important

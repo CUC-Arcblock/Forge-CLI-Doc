@@ -57,7 +57,8 @@ const md5 = data =>
     .update(data)
     .digest('hex');
 
-function sleep(timeout = 1000) {
+function sleep(timeout = 1000) {  //休眠1秒
+  //Promise 就是用同步的方式写异步的代码，用来解决回调问题
   return new Promise(resolve => setTimeout(resolve, timeout));
 }
 

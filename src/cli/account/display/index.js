@@ -6,20 +6,20 @@ const { execute, run } = require('./display');
 
 cli('account <address>', 'Get an account info by address', input => action(execute, run, input), {
   requirements: {
-    forgeRelease: false,
-    runningNode: true,
-    rpcClient: true,
+    forgeRelease: false,   //要有运行的节点
+    runningNode: true,     //要有rpc客户端
+    rpcClient: true,       //判断有没有钱包（有没有都可以）
     wallet: args => {
       if (args && args[0] === 'me') {
         return true;
       }
       return false;
     },
-    currentChainRunning: true,
-    chainName: getTopRunningChains,
+    currentChainRunning: true,       //需要现在有运行着的链
+    chainName: getTopRunningChains,  //并提供运行链的第一个的名字
   },
   options: [],
-  handlers: {
+  handlers: {   //举例子帮助用户输入命令行指令
     '--help': () => {
       shell.echo(`
 Examples:

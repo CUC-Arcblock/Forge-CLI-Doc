@@ -10,17 +10,17 @@ cli(
   input => action(execute, run, input),
   {
     requirements: {
-      forgeRelease: false,
-      runningNode: true,
-      rpcClient: true,
-      chainName: getTopRunningChains,
-      currentChainRunning: true,
+      forgeRelease: false,      //forge在运行
+      runningNode: true,        //要有运行着的节点
+      rpcClient: true,          //要有rpc客户端
+      chainName: getTopRunningChains,   //提供运行链的第一个的名字
+      currentChainRunning: true,        //需要现在有运行着的链
     },
-    options: [
+    options: [   //命令行[options]部分可以适用以下两条指令
       ['-d, --show-txs', 'Show transaction details'],
       ['-f, --stream', 'Streaming new blocks on the chain'],
     ],
-    handlers: {
+    handlers: {   //举例子帮助用户输入命令行指令
       '--help': () => {
         shell.echo(`
 Examples:

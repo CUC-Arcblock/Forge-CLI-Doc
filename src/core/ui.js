@@ -3,8 +3,8 @@ const util = require('util');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const progress = require('cli-progress');
-const symbols = require('log-symbols');
-const prettyjson = require('prettyjson');
+const symbols = require('log-symbols');    //使终端的字符带颜色
+const prettyjson = require('prettyjson');  //调整输出数据的格式，使其更加美观
 
 // https://github.com/sindresorhus/cli-spinners/blob/master/spinners.json
 const spinners = [
@@ -100,7 +100,7 @@ const wrapSpinner = async (message = '', func) => {
 
 module.exports = {
   symbols,
-  hr: new inquirer.Separator().line,
+  hr: new inquirer.Separator().line,    //添加行分隔符
   pretty: (data, options) => {
     if (data && typeof data === 'object') {
       return `\n${prettyjson.render(data, options)}\n`;

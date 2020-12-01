@@ -8,15 +8,16 @@ const { fakeMessage } = require('@arcblock/forge-message');
 const { symbols, hr, pretty } = require('core/ui');
 const { createRpcClient, config } = require('core/env');
 const debug = require('core/debug')('tx:send');
-
+//inquirer中注册对话，类型为autocomplete
 inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'));
-
+//构造假消息
 const fakeMessages = enums.SupportedTxs.reduce((acc, x) => {
   acc[x] = pretty(fakeMessage(x), { colors: false });
   return acc;
 }, {});
-
+//构造向inquirer中提出的问题
 const questions = [
+  //问题1：要发送的交易类型是什么
   {
     type: 'autocomplete',
     name: 'type',
@@ -29,11 +30,14 @@ const questions = [
           .sort()
       ),
   },
+  //问题2：请放置要发送的交易object
   {
     type: 'editor',
     name: 'itx',
     message: 'Please enter the itx data object (js supported):',
+    //默认使用假消息
     default: answers => fakeMessages[answers.type],
+    //若交易是证实的，则尝试建立rpc客户端
     validate: x => {
       try {
         safeEval(x, { client: createRpcClient() });
@@ -57,7 +61,9 @@ async function main(data) {
   shell.echo(hr);
 
   try {
+    //根据具体的交易类型，调用rpc客户机的不同的send函数，参数为钱包的token和交易信息，完成交易的发送
     const method = `send${type}`;
+    //由rpc客户
     const res = await client[method]({
       token: wallet.token,
       tx: {
@@ -75,6 +81,7 @@ async function main(data) {
 }
 
 function run() {
+  //有命令参数时，此函数首先执行，并在inquirer处理完问题后，由promise链式调用主函数，并将参数带入main中
   inquirer.prompt(questions).then(main);
 }
 

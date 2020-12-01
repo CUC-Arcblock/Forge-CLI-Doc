@@ -2,7 +2,7 @@
 const { cli, action } = require('core/cli');
 const { getTopRunningChains } = require('core/forge-process');
 const { execute, run } = require('./simulate');
-
+//使用simulator start/stop 命令以开启或停止模拟器
 cli(
   'simulator [action]',
   'Start/stop simulator and generate random traffic',

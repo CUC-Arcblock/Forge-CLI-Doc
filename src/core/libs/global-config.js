@@ -36,9 +36,12 @@ function getDefaultGlobalConfig() {
 
 function mergeConfigs(globalConfig = {}, defaultGlobalConfigs = {}) {
   const globalOpts = Object.assign(
+    // Object.assign() 方法用于将所有可枚举属性的值从一个或多个源对象分配到目标对象。它将返回目标对象。
+    // 举例：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
     pickBy(defaultGlobalConfigs, v => v !== undefined),
     pickBy(globalConfig, (v, k) => k !== undefined && Object.keys(defaultGlobalConfigs).includes(k)) // only read supported fields
-  );
+    
+    );
 
   return globalOpts;
 }
@@ -68,6 +71,7 @@ function setConfig(item, value) {
 }
 
 function getGlobalConfig() {
+  // 得到全局的设置
   return mergeConfigs(rcfile('forge', { cwd: os.homedir() }), getDefaultGlobalConfig());
 }
 

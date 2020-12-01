@@ -6,7 +6,7 @@ const fs = require('fs');
 const isEqual = require('lodash/isEqual');
 const os = require('os');
 const path = require('path');
-const semver = require('semver');
+const semver = require('semver'); //语义化版本规范的实现包
 const shell = require('shelljs');
 const updateNotifier = require('update-notifier');
 const url = require('url');
@@ -63,9 +63,13 @@ async function applyForgeVersion(version) {
   printSuccess(`Forge v${version} activated successfully!`);
 }
 
-function getMinSupportForgeVersion() {
+function getMinSupportForgeVersion() { //得到最小支持forge版本
   if (engines && engines.forge && semver.valid(semver.coerce(engines.forge))) {
+    //semver.coerce()将字符串强制转换为语义化版本
+    //semver.valid() 返回版本的合法格式
+    //semver.valid(semver.coerce('v2')) // '2.0.0'
     return semver.minVersion(engines.forge);
+    //semver.minVersion('>=1.0.0') // '1.0.0'
   }
 
   throw new Error(`invlaid forge engine version: ${engines}`);
@@ -174,18 +178,21 @@ const getChainGraphQLHost = config =>
 
 const checkSatisfiedForgeVersion = (version, range) =>
   semver.satisfies(version, range, { includePrerelease: true });
+  //  semver.satisfies(v1,v2) : 查看v1是否符合版本v2
 
 async function listReleases() {
-  const forgeDistribution = await getForgeDistribution();
+  // 列举本地当前所有的forge的版本信息
+  const forgeDistribution = await getForgeDistribution(); // 得到forge所在的操作系统信息
   let remoteReleasesInfo = [];
   try {
-    const mirror = getConfig('mirror');
+    const mirror = getConfig('mirror'); // 得到配置中key为mirror的配置信息
     remoteReleasesInfo = await fetchReleaseAssetsInfo(forgeDistribution, mirror);
+    // 得到符合当前操作系统forgeDistribution的forge版本信息，
   } catch (error) {
     debug('fetch remote releases information failed:', error.message);
     logError(error);
   }
-
+  
   const versionAssetsMap = await getLocalReleases();
 
   let result = Object.keys(versionAssetsMap)
@@ -209,7 +216,7 @@ async function listReleases() {
 }
 
 async function getLocalVersions() {
-  const releases = await listReleases();
+  const releases = await listReleases(); // 得到符合当前下载的所有forge版本信息
 
   const versions = [];
   releases.forEach(({ version }) => {
@@ -220,6 +227,7 @@ async function getLocalVersions() {
 }
 
 module.exports = {
+  //导出函数和变量
   DEFAULT_CHAIN_NAME_RETURN,
   applyForgeVersion,
   cache: {
@@ -234,7 +242,7 @@ module.exports = {
   getChainGraphQLHost,
   getChainVersion,
   getDefaultChainNameHandlerByChains,
-  getMinSupportForgeVersion,
+  getMinSupportForgeVersion, //获取最小的所支持的Forge的版本
   getOSUserInfo,
   getTopChainName,
   hasChains,

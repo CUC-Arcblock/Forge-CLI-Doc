@@ -7,9 +7,10 @@ const { printSuccess } = require('core/util');
 const debug = require('core/debug')('install');
 
 const BaseAsset = require('./base-asset');
-
+  // 继承自BaseAsset
 class FSAsset extends BaseAsset {
   async download({ uri, fileName, dest }) {
+    //因为文件已经存在于本地，直接拷贝文件到目的地址即可
     debug('copy assets', uri);
 
     fsExtra.copySync(uri, dest);

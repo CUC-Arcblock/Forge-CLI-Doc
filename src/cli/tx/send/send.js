@@ -40,7 +40,6 @@ const questions = [
       } catch (err) {
         return err.message || err.toString();
       }
-
       return true;
     },
   },

@@ -113,6 +113,10 @@ function initCli(program) {
     });
 }
 
+/* async 表示是异步函数
+*  action的作用是当input是string的时候，采用exeute执行
+*  当input不是string的时候，采用run执行
+*/
 async function action(execute, run, input) {
   if (typeof input === 'string') {
     let data = null;

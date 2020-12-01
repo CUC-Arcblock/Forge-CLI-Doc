@@ -130,6 +130,8 @@ async function formatVersion(version) {
 }
 
 const createAsset = ({ mirror, version, platform }) => {
+    //文件存在于本地，则使用FSAsset，否则使用HttpAsset
+  //两者都继承自BASEAsset
   if (fs.existsSync(mirror)) {
     return new FSAsset({ baseUri: mirror, version, platform });
   }

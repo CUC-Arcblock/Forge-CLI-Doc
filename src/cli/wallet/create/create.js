@@ -36,7 +36,7 @@ async function main({ opts: { defaults } }) {
 
   if (!defaults) {
     const { pk, hash, role } = await inquirer.prompt(questions);
-
+    // 让用户根据questions选择信息。
     const type = WalletType({
       pk: types.KeyType[pk],
       hash: types.HashType[hash],
@@ -48,6 +48,7 @@ async function main({ opts: { defaults } }) {
 
     const result = await inquirer.prompt([
       {
+        // 让用户选择一种编码方式
         type: 'checkbox',
         name: 'encoding',
         default: ['BASE16', 'BASE58', 'BASE64', 'BASE64_URL'],

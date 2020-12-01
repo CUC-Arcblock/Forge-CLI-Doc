@@ -11,10 +11,12 @@ async function main() {
     debug('global version:', globalVersion);
 
     const releases = (await listReleases()) || [];
+    // listReleases()列举的是符合操作系统的forge版本
     if (releases.length === 0) {
       printInfo(`Forge releases not found, please run ${chalk.cyan('forge install')} first`);
     } else {
       print('Installed:');
+      // 循环遍历本地forge版本，如果是官方支持的forge版本，则将其打印
       releases.forEach(({ version }) => {
         highlightOfList(
           () =>

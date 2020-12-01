@@ -98,8 +98,17 @@ function isFile(x) {
 }
 
 async function getLocalReleases() {
+  /* REQUIRED_DIRS: {
+    tmp: path.join(CLI_BASE_DIRECTORY, 'tmp'),
+    bin: path.join(CLI_BASE_DIRECTORY, 'bin'),
+    cache: path.join(CLI_BASE_DIRECTORY, 'cache'),
+    logs: path.join(CLI_BASE_DIRECTORY, 'logs'),
+    release: path.join(CLI_BASE_DIRECTORY, 'release'),
+  },
+  path.join() 方法会将所有给定的 path 片段连接到一起（使用平台特定的分隔符作为定界符），然后规范化生成的路径。
+  */
   const { release } = REQUIRED_DIRS;
-  const localAllAssetNames = fs.readdirSync(release);
+  const localAllAssetNames = fs.readdirSync(release); // 方法将返回一个包含“指定目录下所有文件名称”的数组对象。
   const versionAssetsMap = {};
   localAllAssetNames.forEach(releaseName => {
     const dir = path.join(release, releaseName);
@@ -273,7 +282,7 @@ function getForgeBinPath(version) {
 
 function getGlobalForgeVersion() {
   const filePath = path.join(getReleaseDirectory('forge'), 'release.yml');
-  const curVersion = getForgeVersionFromYaml(filePath, 'current');
+  const curVersion = getForgeVersionFromYaml(filePath, 'current'); // 通过本地yaml配置文件读取当前的forge版本信息
   if (semver.valid(curVersion)) {
     return curVersion;
   }

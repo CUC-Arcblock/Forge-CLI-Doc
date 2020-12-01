@@ -3,7 +3,7 @@ const fs = require('fs');
 const chalk = require('chalk');
 const emoji = require('node-emoji');
 const {
-  getForgeDistribution,
+  getForgeDistribution, //得到当前forge所在的操作系统
   getOsAsync,
   print,
   printError,
@@ -20,13 +20,15 @@ async function main({ args: [userVersion], opts: { mirror = DEFAULT_MIRROR, rele
     const platform = await getForgeDistribution();
     const osInfo = await getOsAsync();
     printInfo(`Detected platform is: ${osInfo.dist}`);
-    warningUnSupportedOS(osInfo.dist);
+    warningUnSupportedOS(osInfo.dist);  //检查不合法的操作系统
 
     if (releaseDir && fs.existsSync(releaseDir)) {
+      // fs.existsSync(文件) 文件存在返回true，不存在返回false
       printInfo(`${chalk.yellow(`Using local releaseDir: ${releaseDir}.`)}`);
     }
 
     const { version, isLatest } = await formatVersion(userVersion);
+    // 从用户输入的版本信息得到 规范格式的版本version以及该版本是否是最新版本
     const asset = createAsset({
       version,
       mirror: releaseDir || mirror,

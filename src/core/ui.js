@@ -79,7 +79,8 @@ const spinners = [
   'layer',
 ];
 
-const getSpinner = opts => { //随机返回spinner数组里面的一个元素
+const getSpinner = opts => { 
+  //随机返回spinner数组里面的一个元素
   const random = Math.floor(Math.random() * spinners.length);
   // 得到 0 - spinners.length-1 之间的整数
   // Math.random()生成0-1之间的浮点型随机数

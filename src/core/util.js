@@ -27,6 +27,7 @@ const {
   SUPPORTED_OS,
 } = require('../constant');
 const debug = require('./debug')('util');
+// 记得要在node命令前加上DEBUG=”util”,不然是看不见文中的debug()的打印信息的
 
 /**
  * return json string with indent
@@ -213,20 +214,56 @@ const chainSortHandler = (xName, yName) => {
 const strEqual = (strA = '', strB = '') => strA.toUpperCase() === strB.toUpperCase();
 
 const fetchAsset = async (assetPath, mirror = DEFAULT_MIRROR) => {
+  //   DEFAULT_MIRROR: 'https://releases.arcblock.io',
+  // assetPath : 'forge/versions.json'
   const resp = await axios.get(url.resolve(mirror, assetPath));
+  // url.resolve(from ,to) :方法会以一种 Web 浏览器解析超链接的方式把一个目标 URL 解析成相对于一个基础 URL。
+  // 参考：http://nodejs.cn/api/url/url_resolve_from_to.html
+  // 即请求：https://releases.arcblock.io/forge/versions.json网站，得到forge的版本信息
+  //axios.get()模拟浏览器访问网站，传入url等信息，返回数据。
+
   return resp.data;
 };
 
 const fetchReleaseAssetsInfo = async (platform, mirror) => {
+  // 返回https://releases.arcblock.io/forge/versions.json网页的数据信息
   const data = await fetchAsset(ASSETS_PATH.VERSIONS, mirror);
+  //   VERSIONS: 'forge/versions.json',
   const result = [];
   if (Array.isArray(data)) {
+    // Array.isArray() 用于确定传递的值是否是一个 Array
+    // data的格式：
+    /**
+  [
+  {
+    "version": "v1.1.1-p0",
+    "assets": [
+      {
+        "name": "forge_centos_amd64.tgz",
+        "url": "https://api.github.com/repos/ArcBlock/forge-release/releases/assets/19166882",
+        "size": 30220019,
+        "created_at": "2020-03-31T00:43:55Z",
+        "updated_at": "2020-03-31T00:43:56Z"
+      },
+      {
+        "name": "forge_darwin_amd64.tgz",
+        "url": "https://api.github.com/repos/ArcBlock/forge-release/releases/assets/19168022",
+        "size": 22675324,
+        "created_at": "2020-03-31T00:55:28Z",
+        "updated_at": "2020-03-31T00:55:31Z"
+      },
+    ]
+  }
+]
+     */
     data.forEach(({ version, assets }) => {
       const tmp = { version, assets: [] };
       result.push(tmp);
       assets.forEach(({ name }) => {
         const index = name.indexOf(`_${platform}_`);
+        // indexOf() 方法可返回某个指定的字符串值在字符串中首次出现的位置。
         if (index > 0) {
+          // 仅将符合当前传入的platform系统的版本信息加入到最终的结果中
           tmp.assets.push(name.substring(0, index));
         }
       });
@@ -319,8 +356,10 @@ const downloadPackageFromNPM = async ({ name, dest, registry = '', verify = true
  */
 async function getOsAsync() {
   const osInfo = await util.promisify(getos)();
+  //getos()是获得操作系统的信息
   if (osInfo.os === 'darwin') {
-    osInfo.dist = 'darwin';
+    osInfo.dist = 'darwin'; 
+    //darwin是一种类linux的操作系统
   }
 
   return osInfo;
@@ -339,7 +378,8 @@ function getForgeDistributionByOS(osPlatform) {
   return osPlatform;
 }
 
-async function getForgeDistribution() {
+async function getForgeDistribution() { // 得到forge的操作系统
+  //当当前操作系统是darwin或者linux时，返回系统名称，并打印当前系统信息
   const platform = process.env.FORGE_CLI_PLATFORM;
   if (platform && ['darwin', 'centos'].includes(platform)) {
     printInfo(`${chalk.yellow(`Using custom platform: ${process.env.FORGE_CLI_PLATFORM}`)}`);
@@ -347,6 +387,7 @@ async function getForgeDistribution() {
   }
 
   const info = await getOsAsync();
+  // 得到操作系统的信息并返回
   return getForgeDistributionByOS(info.os);
 }
 
@@ -438,7 +479,7 @@ module.exports = {
   fetchAsset,
   fetchReleaseAssetsInfo,
   getNPMConfig,
-  getForgeDistribution,
+  getForgeDistribution, 
   getForgeDistributionByOS,
   getOsAsync,
   getPort,

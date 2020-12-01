@@ -77,6 +77,18 @@ async function main({ opts: { defaults } }) {
   if (encoding.includes('BASE64')) {
     json.pk_base64 = Buffer.from(hexToBytes(json.pk)).toString('base64');
     json.sk_base64 = Buffer.from(hexToBytes(json.sk)).toString('base64');
+    /**
+     * hexToBytes : 十六进制转Bytes
+     *
+     * Buffer : js内置的缓冲区类
+     * Buffer.from(string[, encoding]) ：创建一个包含 string 的新 Buffer。 
+     * encoding 参数指定用于将 string 转换为字节的字符编码。
+     * encoding默认为utf-8。
+     * 
+     * buf.toString([encoding[, start[, end]]])
+     * 根据 encoding 指定的字符编码将 buf 解码成字符串。 传入 start 和 end 可以只解码 buf 的子集。
+     *  */ 
+    
   }
   if (encoding.includes('BASE64_URL')) {
     json.pk_base64_url = base64.encode(hexToBytes(json.pk));

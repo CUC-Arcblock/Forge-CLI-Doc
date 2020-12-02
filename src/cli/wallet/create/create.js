@@ -6,6 +6,7 @@ const { fromRandom, WalletType } = require('@arcblock/forge-wallet');
 const { toBase58, hexToBytes } = require('@arcblock/forge-util');
 const { pretty } = require('core/ui');
 
+// types定义了枚举了公私钥的算法、哈希算法、DID钱包角色、地址编码算法。
 const questions = [
   {
     type: 'list',
@@ -13,6 +14,7 @@ const questions = [
     default: types.RoleType.ROLE_ACCOUNT,
     message: 'Please select a role type:',
     choices: Object.keys(types.RoleType),
+    //Object.keys(arr): 返回=>一个表示给定对象的所有可枚举属性的字符串数组。
   },
   {
     type: 'list',
@@ -31,24 +33,25 @@ const questions = [
 ];
 
 async function main({ opts: { defaults } }) {
-  let wallet = fromRandom();
+  let wallet = fromRandom(); // 生成一个钱包，无法进行签名、验证等
   let encoding = ['BASE16', 'BASE58', 'BASE64', 'BASE64_URL'];
 
   if (!defaults) {
     const { pk, hash, role } = await inquirer.prompt(questions);
     // 让用户根据questions选择信息。
     const type = WalletType({
+    // WalletType是创建一个生成钱包的类型对象，该对象用于创建一个钱包
       pk: types.KeyType[pk],
       hash: types.HashType[hash],
       role: types.RoleType[role],
       address: types.EncodingType.BASE58,
     });
 
-    wallet = fromRandom(type);
+    wallet = fromRandom(type); // 重新按照type生成钱包
 
+     // 让用户选择一种编码方式
     const result = await inquirer.prompt([
       {
-        // 让用户选择一种编码方式
         type: 'checkbox',
         name: 'encoding',
         default: ['BASE16', 'BASE58', 'BASE64', 'BASE64_URL'],
@@ -61,8 +64,9 @@ async function main({ opts: { defaults } }) {
     encoding = result.encoding;
   }
 
-  const json = wallet.toJSON();
+  const json = wallet.toJSON();// 将钱包对象序列化
   if (!encoding.length) {
+    // encoding没有选择上的话，默认以BASE16编码公私钥
     encoding = ['BASE16'];
   }
 
